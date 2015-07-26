@@ -52,7 +52,6 @@ public class RegisterFilter implements Filter {
             if (user != null) {
                 ub = null;
                 request.setAttribute("userBean", ub);
-                //hsr.sendRedirect("./regErrors/regError.jsp");
                 request.getRequestDispatcher("regErrors/regError.jsp").forward(request, response);
             } else {
                 chain.doFilter(request, response);
@@ -69,19 +68,16 @@ public class RegisterFilter implements Filter {
     public void doFilter(ServletRequest request, ServletResponse response,
             FilterChain chain)
             throws IOException, ServletException {
-        hsr = (HttpServletResponse) response;
         if (!checkEmailField(request)) {
             ub = null;
             request.setAttribute("userBean", ub);
             request.getRequestDispatcher("regErrors/emailError.jsp").forward(request, response);
-            //hsr.sendRedirect("./regErrors/emailError.jsp");
         } else {
             if (isPasswordValid(request)) {
                 checkIfUserExist(request, response, chain);
             } else {
                 ub = null;
                 request.setAttribute("userBean", ub);
-                //hsr.sendRedirect("./regErrors/passError.jsp");
                 request.getRequestDispatcher("regErrors/passError.jsp").forward(request, response);
             }
         }
