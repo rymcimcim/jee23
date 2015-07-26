@@ -25,8 +25,7 @@ public class LoginFilter implements Filter {
             FilterChain chain)
             throws IOException, ServletException {
         getLoginData(request, response);
-        checkLoginFields(request, response);
-        checkPassword(request, response, chain);
+        checkLoginFields(request, response, chain);
     }
 
     private void getLoginData(ServletRequest request, ServletResponse response) {
@@ -34,11 +33,13 @@ public class LoginFilter implements Filter {
         password = request.getParameter("password");
     }
 
-    private void checkLoginFields(ServletRequest request, ServletResponse response) throws ServletException, IOException {
+    private void checkLoginFields(ServletRequest request, ServletResponse response, FilterChain chain) throws ServletException, IOException {
         if ("".equals(username) || username == null || "".equals(password) || password == null) {
-            HttpServletResponse hsr = (HttpServletResponse) response;
-            hsr.sendRedirect("./errors/loginBadData.jsp");
-        }
+            UserBean ub = null;
+            request.setAttribute("userBean", ub);
+            request.getRequestDispatcher("./errors/loginBadData.jsp").forward(request, response);
+        } else
+            checkPassword(request, response, chain);
     }
 
     private void checkPassword(ServletRequest request, ServletResponse response,
