@@ -1,6 +1,7 @@
 package pl.jeeweb.zadanie23.servlet;
 
 import java.io.IOException;
+import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
@@ -10,8 +11,10 @@ import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
+import pl.jeeweb.zadanie23.entity.Address;
 import pl.jeeweb.zadanie23.entity.User;
 import pl.jeeweb.zadanie23.entity.UserBean;
+import pl.jeeweb.zadanie23.util.CRUDRunner;
 import pl.jeeweb.zadanie23.util.HibernateUtil;
 
 public class LoginServlet extends HttpServlet {
@@ -20,6 +23,7 @@ public class LoginServlet extends HttpServlet {
     private String password;
     private User user;
     private UserBean userBean;
+    private List<Address> addressList;
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -43,6 +47,10 @@ public class LoginServlet extends HttpServlet {
             userBean.setPrivilege(user.getPrivilege());
             userBean.setDescription();
             request.setAttribute("userBean", userBean);
+            
+            addressList = CRUDRunner.retriveUserAddresses(userBean.getUsername());
+            request.setAttribute("addressList", addressList);
+            
             String page = request.getParameter("page");
             if (page != null) {
                 request.getRequestDispatcher(page).forward(request, response);
@@ -83,10 +91,5 @@ public class LoginServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
-    }
-
-    @Override
-    public String getServletInfo() {
-        return "Short description";
     }
 }

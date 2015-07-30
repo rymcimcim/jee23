@@ -2,19 +2,6 @@
 <c:choose>
     <c:when test="${(not empty cookie.username) && (not empty cookie.password)}">
         <c:if test="${empty userBean}">
-            <%--<c:set var="username" value="${cookie.username.value}" />
-            <%
-                UserBean ub = new UserBean();
-                User u = new User();
-                u = CRUDRunner.retrieveFromUsername((String)pageContext.getAttribute("username"));
-                ub.setUsername(u.getUsername());
-                ub.setId(u.getId());
-                ub.setEmail(u.getEmail());
-                ub.setPrivilege(u.getPrivilege());
-                ub.setDescription();
-                request.setAttribute("userBean", ub);
-            %>--%>
-
             <jsp:forward page="LoginServlet">
                 <jsp:param name="username" value="${cookie.username.value}" />
                 <jsp:param name="password" value="${cookie.password.value}" />
@@ -31,6 +18,14 @@
             <body>
                 <h1>Welcome <jsp:getProperty name="userBean" property="username" />! You are logged in!</h1>
                 <jsp:getProperty name="userBean" property="description" />
+                
+                <c:if test="${not empty addressList}">
+                    <c:import url="address.jsp" />
+                </c:if>
+                <br />
+                <form action="addressForm.jsp">
+                    <input type="submit" value="Add New" />
+                </form><br /><br /><br />
                 <form action="usersList.jsp">
                     <input type="submit" value="Users List" />
                 </form>

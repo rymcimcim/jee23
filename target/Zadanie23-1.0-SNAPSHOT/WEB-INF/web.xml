@@ -20,6 +20,30 @@
         <filter-name>UnRegFilter</filter-name>
         <filter-class>pl.jeeweb.zadanie23.filter.UnRegFilter</filter-class>
     </filter>
+    <filter>
+        <filter-name>DelAddrFilter</filter-name>
+        <filter-class>pl.jeeweb.zadanie23.filter.DelAddrFilter</filter-class>
+    </filter>
+    <filter>
+        <filter-name>AddAddrFilter</filter-name>
+        <filter-class>pl.jeeweb.zadanie23.filter.AddAddrFilter</filter-class>
+    </filter>
+    <filter>
+        <filter-name>EditAddrFilter</filter-name>
+        <filter-class>pl.jeeweb.zadanie23.filter.EditAddrFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>EditAddrFilter</filter-name>
+        <servlet-name>EditAddrServlet</servlet-name>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>AddAddrFilter</filter-name>
+        <servlet-name>AddAddrServlet</servlet-name>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>DelAddrFilter</filter-name>
+        <servlet-name>DelAddrServlet</servlet-name>
+    </filter-mapping>
     <filter-mapping>
         <filter-name>UnRegFilter</filter-name>
         <url-pattern>/regErrors/*</url-pattern>
@@ -56,6 +80,18 @@
         <servlet-name>PremiumPrivServlet</servlet-name>
         <servlet-class>pl.jeeweb.zadanie23.servlet.PremiumPrivServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>AddAddrServlet</servlet-name>
+        <servlet-class>pl.jeeweb.zadanie23.servlet.AddAddrServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>DelAddrServlet</servlet-name>
+        <servlet-class>pl.jeeweb.zadanie23.servlet.DelAddrServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>EditAddrServlet</servlet-name>
+        <servlet-class>pl.jeeweb.zadanie23.servlet.EditAddrServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>RegisterServlet</servlet-name>
         <url-pattern>/RegisterServlet</url-pattern>
@@ -71,6 +107,18 @@
     <servlet-mapping>
         <servlet-name>PremiumPrivServlet</servlet-name>
         <url-pattern>/PremiumPrivServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AddAddrServlet</servlet-name>
+        <url-pattern>/AddAddrServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DelAddrServlet</servlet-name>
+        <url-pattern>/DelAddrServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>EditAddrServlet</servlet-name>
+        <url-pattern>/EditAddrServlet</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

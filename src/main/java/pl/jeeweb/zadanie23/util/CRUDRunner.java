@@ -1,16 +1,21 @@
 package pl.jeeweb.zadanie23.util;
 
 import java.util.List;
+import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.criterion.Restrictions;
+import pl.jeeweb.zadanie23.entity.Address;
 import pl.jeeweb.zadanie23.entity.User;
 
 public class CRUDRunner {
 
     private static User user;
+    private static Address address;
     private static List allUsers;
+    private static List addressList;
 
     public static void create(String username, String password, String email) {
         user = null;
@@ -42,10 +47,6 @@ public class CRUDRunner {
             tx = session.beginTransaction();
             Query queryResult = session.createQuery("from User");
             allUsers = queryResult.list();
-            /*for (Object allUser : allUsers) {
-                user = (User) allUser;
-            }
-            System.out.println("Database contents delivered...");*/
             tx.commit();
         } catch (HibernateException e) {
             if (tx != null) {
@@ -54,7 +55,7 @@ public class CRUDRunner {
         } finally {
             session.close();
         }
-            return allUsers;
+        return allUsers;
     }
 
     public static User retrieveFromUsername(String username) {
@@ -62,14 +63,13 @@ public class CRUDRunner {
         Session session = HibernateUtil.getSessionFactory().openSession();
         Transaction tx = null;
         try {
-            session.beginTransaction();
-
+            tx = session.beginTransaction();
             String queryString = "from User where username = :username";
             Query query = session.createQuery(queryString);
             query.setString("username", username);
             Object queryResult = query.uniqueResult();
             user = (User) queryResult;
-            session.getTransaction().commit();
+            tx.commit();
         } catch (HibernateException e) {
             if (tx != null) {
                 tx.rollback();
@@ -79,14 +79,119 @@ public class CRUDRunner {
         }
         return user;
     }
+
+    public static void createAddress(String username, String type, String province, String city,
+            int post1, int post2, String street, int house_nr, int flat_nr) {
+        user = null;
+        user = (User) retrieveFromUsername(username);
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction tx = null;
+        try {
+            tx = session.beginTransaction();
+            address = new Address();
+            address.setUser(user);
+            address.setType(type);
+            address.setProvince(province);
+            address.setCity(city);
+            address.setPost1(post1);
+            address.setPost2(post2);
+            address.setStreet(street);
+            address.setHouse_nr(house_nr);
+            address.setFlat_nr(flat_nr);
+            session.save(address);
+            tx.commit();
+        } catch (HibernateException e) {
+            if (tx != null) {
+                tx.rollback();
+            }
+        } finally {
+            session.close();
+        }
+    }
     
+    public static Address getAddress(int id) {
+        address = null;
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction tx = null;
+        try {
+            tx = session.beginTransaction();
+            Criteria criteria = session.createCriteria(Address.class);
+            criteria.add(Restrictions.eq("addr_id", id));
+            address = (Address)criteria.uniqueResult();
+            tx.commit();
+        } catch (HibernateException e) {
+            if (tx != null) {
+                tx.rollback();
+            }
+        } finally {
+            session.close();
+        }
+        return address;
+    }
+    
+    public static void deleteAddress(int i) {
+        address = null;
+        address = getAddress(i);
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction tx = null;
+        try {
+             tx = session.beginTransaction();
+             session.delete(address);
+             tx.commit();
+         } catch (HibernateException e) {
+            if (tx != null) {
+                tx.rollback();
+            }
+        } finally {
+            session.close();
+        }
+    }
+
+    public static List retriveUserAddresses(String username) {
+        addressList = null;
+        user = null;
+        user = (User) retrieveFromUsername(username);
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction tx = null;
+        try {
+            tx = session.beginTransaction();
+            Criteria criteria = session.createCriteria(Address.class);
+            criteria.add(Restrictions.eq("user", user));
+            addressList = criteria.list();
+            tx.commit();
+        } catch (HibernateException e) {
+            if (tx != null) {
+                tx.rollback();
+            }
+        } finally {
+            session.close();
+        }
+        return addressList;
+    }
+
     public static void updateUser(User user) {
         Session session = HibernateUtil.getSessionFactory().openSession();
         Transaction tx = null;
         try {
-            session.beginTransaction();
+            tx = session.beginTransaction();
             session.update(user);
-            session.getTransaction().commit();
+            tx.commit();
+        } catch (HibernateException e) {
+            if (tx != null) {
+                tx.rollback();
+            }
+        } finally {
+            session.close();
+        }
+    }
+    
+    public static void updateAddress(Address address) {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        Transaction tx = null;
+        try {
+            tx = session.beginTransaction();
+            session.update(address);
+            tx.commit();
         } catch (HibernateException e) {
             if (tx != null) {
                 tx.rollback();

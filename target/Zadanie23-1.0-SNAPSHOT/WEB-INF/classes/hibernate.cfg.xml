@@ -7,5 +7,8 @@
     <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/test</property>
     <property name="hibernate.connection.username">root</property>
     <property name="hibernate.connection.password">jedrzej</property>
+    
+    <mapping class="pl.jeeweb.zadanie23.entity.User" />
+    <mapping class="pl.jeeweb.zadanie23.entity.Address" />
   </session-factory>
 </hibernate-configuration>
